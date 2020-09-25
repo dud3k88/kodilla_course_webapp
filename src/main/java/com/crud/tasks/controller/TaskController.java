@@ -4,6 +4,7 @@ import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +24,9 @@ public class TaskController {
         return taskMapper.mapToTaskDtoList(service.getAllTasks());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "getTask")
-    public TaskDto getTask(Long taskId) {
-        return taskMapper.mapToTaskDto(service.getTaskById());
+    @RequestMapping(method = RequestMethod.GET, value = "/{taskId}")
+    public TaskDto getTask(@PathVariable Long taskId) {
+        return taskMapper.mapToTaskDto(service.getTaskById(taskId));
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "deleteTask")
