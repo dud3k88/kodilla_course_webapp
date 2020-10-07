@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export CATALINA_HOME= /Users/mateuszdudek/downloads/apache-tomcat-9.0.38
+export CATALINA_HOME=/Users/mateuszdudek/downloads/apache-tomcat-9.0.38
 
 stop_tomcat()
 {
@@ -17,14 +17,14 @@ rename() {
   rm build/libs/crud.war
   if mv build/libs/tasks-0.0.1-SNAPSHOT.war build/libs/crud.war; then
      echo "Successfully renamed file"
-  else ./runcrud.sh
+  else
      echo "Cannot rename file"
      fail
   fi
 }
 
 copy_file() {
-  if sudo cp build/libs/crud.war $CATALINA_HOME/webapps; then
+  if cp build/libs/crud.war $CATALINA_HOME/webapps; then
      start_tomcat
   else
      fail
