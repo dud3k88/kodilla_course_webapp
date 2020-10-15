@@ -4,7 +4,6 @@ import com.crud.tasks.domain.CreatedTrelloCard;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.trello.config.TrelloConfig;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +16,19 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import static java.util.Optional.ofNullable;
 
-@Getter
 @Component
 public class TrelloClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
 
-    //@Autowired
+    @Autowired
     private RestTemplate restTemplate;
-    //@Autowired
+    @Autowired
     private TrelloConfig trelloConfig;
 
-    @Autowired
-    public TrelloClient(RestTemplate restTemplate, TrelloConfig trelloConfig) {
-        this.restTemplate = restTemplate;
-        this.trelloConfig = trelloConfig;
-    }
+
 
     public List<TrelloBoardDto> getTrelloBoards() {
         URI url = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/members/mateuszdudek5/boards")
@@ -44,8 +38,8 @@ public class TrelloClient {
                 .queryParam("lists", "all").build().encode().toUri();
 
         try{
-           TrelloBoardDto[] boardResponse = restTemplate.getForObject(url, TrelloBoardDto[].class);
-            return Arrays.asList(Optional.ofNullable(boardResponse).orElse(new TrelloBoardDto[0]));
+           TrelloBoardDto[] boardsResponse = restTemplate.getForObject(url, TrelloBoardDto[].class);
+            return Arrays.asList(ofNullable(boardsResponse).orElse(new TrelloBoardDto[0]));
         } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
             return new ArrayList<>();

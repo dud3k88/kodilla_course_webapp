@@ -1,12 +1,12 @@
 package com.crud.tasks.trello.client;
 
 import com.crud.tasks.domain.TrelloBoardDto;
+import com.crud.tasks.trello.config.TrelloConfig;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,15 +28,17 @@ public class TrelloClientTest {
     @Mock
     private RestTemplate restTemplate;
 
+    @Mock
+    private TrelloConfig trelloConfig;
+
 
     @Before
     public void init() {
         //given
-        MockitoAnnotations.initMocks(this);
-        when(trelloClient.getTrelloConfig().getTrelloApiEndpoint()).thenReturn("http://test.com");
-        when(trelloClient.getTrelloConfig().getTrelloUsername()).thenReturn("mateuszdudek5");
-        when(trelloClient.getTrelloConfig().getTrelloAppKey()).thenReturn("test");
-        when(trelloClient.getTrelloConfig().getTrelloToken()).thenReturn("test");
+        when(trelloConfig.getTrelloApiEndpoint()).thenReturn("http://test.com");
+        when(trelloConfig.getTrelloUsername()).thenReturn("mateuszdudek5");
+        when(trelloConfig.getTrelloAppKey()).thenReturn("test");
+        when(trelloConfig.getTrelloToken()).thenReturn("test");
     }
 
     @Test
@@ -64,7 +66,7 @@ public class TrelloClientTest {
         //given
         URI uri = new URI("http://test.com/members/mateuszdudek5/boards?key=test&token=test&fields=name,id&lists=all");
 
-        when(trelloClient.getRestTemplate().getForObject(uri, TrelloBoardDto[].class)).thenReturn(null);
+        when(restTemplate.getForObject(uri, TrelloBoardDto[].class)).thenReturn(null);
 
         //when
         List<TrelloBoardDto> emptyTrelloBoard = trelloClient.getTrelloBoards();
