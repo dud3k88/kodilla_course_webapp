@@ -1,7 +1,7 @@
 package com.crud.tasks.service;
 
 import com.crud.tasks.domain.Mail;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,8 +12,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
-class SimpleEmailServiceTest {
+@RunWith(MockitoJUnitRunner.Silent.class)
+public class SimpleEmailServiceTest {
 
     @InjectMocks
     private SimpleEmailService simpleEmailService;
