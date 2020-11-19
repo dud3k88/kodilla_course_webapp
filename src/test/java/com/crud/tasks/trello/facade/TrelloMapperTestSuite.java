@@ -60,4 +60,43 @@ public class TrelloMapperTestSuite {
         Assert.assertNotNull(trelloBoardDtos1);
         Assert.assertEquals(0, trelloBoardDtos1.size());
     }
+
+    @Test
+    public void shouldFetchTrelloBoards() {
+        //given
+        List<TrelloListDto> trelloLists = new ArrayList<>();
+        trelloLists.add(new TrelloListDto("1", "my_list", false));
+
+        List<TrelloBoardDto> trelloBoards = new ArrayList<>();
+        trelloBoards.add(new TrelloBoardDto("1", "my_task", trelloLists));
+
+        List<TrelloList> mappedTrelloLists = new ArrayList<>();
+        mappedTrelloLists.add(new TrelloList("1", "my_list", false));
+
+        List<TrelloBoard> mappedTrelloBoards = new ArrayList<>();
+        mappedTrelloBoards.add(new TrelloBoard("1", "my_task", mappedTrelloLists));
+
+        Mockito.when(trelloService.fetchTrelloBoards()).thenReturn(trelloBoards);
+        Mockito.when(trelloMapper.mapToBoards(trelloBoards)).thenReturn(mappedTrelloBoards);
+        Mockito.when(trelloMapper.mapToBoardDto(anyList())).thenReturn(trelloBoards);
+        Mockito.when(trelloValidator.validateTrelloBoards(mappedTrelloBoards)).thenReturn(mappedTrelloBoards);
+
+        //when
+        List<TrelloBoardDto> trelloBoardDtos = trelloFacade.fetchTrelloBoards();
+
+        //then
+        Assert.assertNotNull(trelloBoardDtos);
+        Assert.assertEquals(1, trelloBoardDtos.size());
+
+        trelloBoardDtos.forEach(trelloBoardDto -> {
+            Assert.assertEquals("1", trelloBoardDto.getId());
+            Assert.assertEquals("my_task", trelloBoardDto.getName());
+
+            trelloBoardDto.getLists().forEach(trelloListDto -> {
+                Assert.assertEquals("1", trelloListDto.getId());
+                Assert.assertEquals("my_list", trelloListDto.getName());
+                Assert.assertEquals(false, trelloListDto.isClosed());
+            });
+        });
+    }
 }
