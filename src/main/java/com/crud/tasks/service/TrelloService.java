@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static java.util.Optional.ofNullable;
+import java.util.Optional;
 
 @Service
 public class TrelloService {
@@ -33,15 +32,8 @@ public class TrelloService {
 
     public CreatedTrelloCardDto createTrelloCard(final TrelloCardDto trelloCardDto) {
         CreatedTrelloCardDto newCard = trelloClient.createNewCard(trelloCardDto);
-
-        ofNullable(newCard).ifPresent(card -> emailService.send(new Mail(adminConfig.getAdminMail(), SUBJECT,
-                "New Card "+ card.getName() + " hass created on your account")));
-        emailService.send(new Mail(
-                adminConfig.getAdminMail(),
-                SUBJECT,
-                "New Card" + trelloCardDto.getName() + "has been created on your Trello account"
-        ));
-
+        Optional.ofNullable(newCard).ifPresent(card ->  emailService.send(new Mail(adminConfig.getAdminMail(),
+                SUBJECT, "New Card: " + card.getName() + " has been created on your Trello board")));
         return newCard;
     }
 
