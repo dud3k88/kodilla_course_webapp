@@ -26,7 +26,7 @@ public class SimpleEmailService {
 
         LOGGER.info("Starting email preparation");
         try {
-            javaMailSender.send(createMailMassage(mail));
+            javaMailSender.send(createMimeMessage(mail));
 
             LOGGER.info("Email has been sent");
 
